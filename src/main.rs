@@ -11,5 +11,5 @@ use days::{Day, day1::Day1};
 
 fn main() {
     let day1: Box<Day> = Box::new(Day1::new());
-    day1.solve();
+    println!("Day1: {}, {}", day1.solve(0), day1.solve(1));
 }
