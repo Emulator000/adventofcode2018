@@ -1,6 +1,7 @@
 pub mod day1;
+pub mod day2;
 
-use std::cell::{Ref};
+use std::cell::Ref;
 use std::error::Error;
 use std::fs::File;
 use std::io::Read;
