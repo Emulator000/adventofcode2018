@@ -1,5 +1,5 @@
 pub mod day1;
 
 pub trait Day {
-    fn solve(&self, part: usize) -> String;
+    fn solve(&mut self, part: usize) -> String;
 }
