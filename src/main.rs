@@ -1,13 +1,7 @@
-extern crate toml;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde;
-extern crate serde_json;
-
 mod days;
-mod inputs;
+mod input;
 
-use days::{day1::Day1, day2::Day2, Day};
+use crate::days::{day1::Day1, day2::Day2, Day};
 
 fn main() {
     let day1: Box<Day> = Box::new(Day1::new());

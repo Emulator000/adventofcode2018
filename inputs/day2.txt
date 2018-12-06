@@ -1,5 +1,4 @@
-parts = [
-    '''auxwcbzrmdvpsjfgkrthnkioqm
+auxwcbzrmdvpsjfgkrthnkioqm
 auxwcbzrmdvpsjfgbltonyijqe
 auxwcbzrmdfpsefgklthnoioqe
 auxwcbzrmdvpsjfgkluhnjisqe
@@ -248,5 +247,4 @@ yuxwcbzrmdvpsjggklthnlioqe
 auxwcbzradvpsjftklthoyioqe
 auxwcbzrmdvjujfgklmhnyioqe
 auxwcbzrmdvpsrfgklpinyioqe
-auxwobzrvqvpsjfgklthnyioqe'''
-]
+auxwobzrvqvpsjfgklthnyioqe

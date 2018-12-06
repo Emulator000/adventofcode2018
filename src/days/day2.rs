@@ -1,5 +1,7 @@
-use days::Day;
-use inputs::{day2::InputDay2, Input};
+use std::cell::Ref;
+
+use crate::days::Day;
+use crate::input::{Input};
 
 pub struct Day2 {
     input: Box<Input>,
@@ -7,9 +9,10 @@ pub struct Day2 {
 
 impl Day for Day2 {
     fn solve(&self, part: usize) -> String {
+        let input = self.input.get();
         match part {
-            0 => format!("{}", self.solve1()),
-            1 => format!("{}", self.solve2()),
+            0 => format!("{}", self.solve1(input)),
+            1 => format!("{}", self.solve2(input)),
             _ => "".into(),
         }
     }
@@ -18,15 +21,15 @@ impl Day for Day2 {
 impl Day2 {
     pub fn new() -> Self {
         Self {
-            input: Box::new(InputDay2::new()),
+            input: Box::new(Input::new(2)),
         }
     }
 
-    fn solve1(&self) -> i32 {
+    fn solve1(&self, input: Ref<String>) -> i32 {
         0
     }
 
-    fn solve2(&self) -> i32 {
+    fn solve2(&self, input: Ref<String>) -> i32 {
         0
     }
 }

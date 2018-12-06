@@ -1,7 +1,8 @@
+use std::cell::Ref;
 use std::collections::HashSet;
 
-use days::Day;
-use inputs::{day1::InputDay1, Input};
+use crate::days::Day;
+use crate::input::Input;
 
 pub struct Day1 {
     input: Box<Input>,
@@ -9,9 +10,10 @@ pub struct Day1 {
 
 impl Day for Day1 {
     fn solve(&self, part: usize) -> String {
+        let input = self.input.get();
         match part {
-            0 => format!("{}", self.solve1()),
-            1 => format!("{}", self.solve2()),
+            0 => format!("{}", self.solve1(input)),
+            1 => format!("{}", self.solve2(input)),
             _ => "".into(),
         }
     }
@@ -20,13 +22,12 @@ impl Day for Day1 {
 impl Day1 {
     pub fn new() -> Self {
         Self {
-            input: Box::new(InputDay1::new()),
+            input: Box::new(Input::new(1)),
         }
     }
 
-    fn solve1(&self) -> i32 {
-        self.input
-            .get(0)
+    fn solve1(&self, input: Ref<String>) -> i32 {
+        input
             .split("\n")
             .map(|num| match num.parse() {
                 Ok(num) => num,
@@ -35,22 +36,18 @@ impl Day1 {
             .sum()
     }
 
-    fn solve2(&self) -> i32 {
+    fn solve2(&self, input: Ref<String>) -> i32 {
         let mut numbers = HashSet::new();
 
         let mut sum = 0;
-        self.input
-            .get(0)
-            .split("\n")
-            .cycle()
-            .all(|num| match num.parse() {
-                Ok::<i32, _>(num) => numbers.insert({
-                    sum = sum + num;
+        input.split("\n").cycle().all(|num| match num.parse() {
+            Ok::<i32, _>(num) => numbers.insert({
+                sum += num;
 
-                    sum
-                }),
-                Err(_) => false,
-            });
+                sum
+            }),
+            Err(_) => true,
+        });
 
         sum
     }
