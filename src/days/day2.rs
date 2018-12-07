@@ -1,5 +1,5 @@
 use std::cell::Ref;
-use std::collections::{HashMap};
+use std::collections::{HashSet, HashMap};
 
 use crate::days::Day;
 use crate::input::Input;
@@ -50,36 +50,18 @@ impl Day2 {
     }
 
     fn solve2(&self, input: Ref<String>) -> String {
-        let mut best = 0;
-        let mut result = String::new();
-        for line in input.lines() {
-            for line2 in input.lines() {
-                if line == line2 {
-                    continue;
-                }
+        let mut words = HashSet::new();
+        for word in input.lines() {
+            for (index, _) in word.chars().enumerate() {
+                let mut word = String::from(word);
+                word.replace_range(index..index+1, "*");
 
-                let mut diff = 0;
-                let same = line
-                    .chars()
-                    .zip(line2.chars())
-                    .filter_map(|(c, c2)| {
-                        if c != c2 {
-                            diff += 1;
-
-                            None
-                        } else {
-                            Some(c)
-                        }
-                    })
-                    .collect::<String>();
-
-                if best == 0 || diff < best {
-                    best = diff;
-                    result = same;
+                if !words.insert(word.clone()) {
+                    return word.replace("*", "");
                 }
             }
         }
 
-        result
+        return String::new();
     }
 }
