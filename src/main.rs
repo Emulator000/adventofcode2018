@@ -1,6 +1,8 @@
 #![feature(test)]
-
+#![feature(range_contains)]
 extern crate test;
+#[macro_use]
+extern crate text_io;
 
 mod days;
 mod input;

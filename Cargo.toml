@@ -5,3 +5,4 @@ authors = ["Emulator000 <dario.cancelliere@facile.it>"]
 edition = "2018"
 
 [dependencies]
+text_io = "^0.1"
