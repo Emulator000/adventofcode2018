@@ -1,5 +1,5 @@
 use std::cell::Ref;
-use std::collections::HashMap;
+use std::collections::{HashMap};
 
 use crate::days::Day;
 use crate::input::Input;
@@ -28,7 +28,7 @@ impl Day2 {
 
     fn solve1(&self, input: Ref<String>) -> i32 {
         let final_count = input
-            .split("\n")
+            .lines()
             .map(|line| {
                 line.chars()
                     .fold(HashMap::new(), |mut chars, c| {
@@ -49,7 +49,37 @@ impl Day2 {
         final_count.0 * final_count.1
     }
 
-    fn solve2(&self, input: Ref<String>) -> i32 {
-        0
+    fn solve2(&self, input: Ref<String>) -> String {
+        let mut best = 0;
+        let mut result = String::new();
+        for line in input.lines() {
+            for line2 in input.lines() {
+                if line == line2 {
+                    continue;
+                }
+
+                let mut diff = 0;
+                let same = line
+                    .chars()
+                    .zip(line2.chars())
+                    .filter_map(|(c, c2)| {
+                        if c != c2 {
+                            diff += 1;
+
+                            None
+                        } else {
+                            Some(c)
+                        }
+                    })
+                    .collect::<String>();
+
+                if best == 0 || diff < best {
+                    best = diff;
+                    result = same;
+                }
+            }
+        }
+
+        result
     }
 }
