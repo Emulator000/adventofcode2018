@@ -28,12 +28,12 @@ impl Input {
             Ok(file) => file,
         };
 
-        let mut configuration = String::new();
-        match file.read_to_string(&mut configuration) {
+        let mut input = String::new();
+        match file.read_to_string(&mut input) {
             Err(why) => panic!("Couldn't read {}: {}", display, why.description()),
             Ok(_) => print!("{} loaded correctly.\n", display),
         }
 
-        configuration
+        input
     }
 }

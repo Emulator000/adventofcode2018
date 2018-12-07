@@ -1,5 +1,4 @@
-use std::cell::Ref;
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 
 use crate::days::Day;
 use crate::input::Input;
@@ -10,10 +9,9 @@ pub struct Day2 {
 
 impl Day for Day2 {
     fn solve(&self, part: usize) -> String {
-        let input = self.input.get();
         match part {
-            0 => format!("{}", self.solve1(input)),
-            1 => format!("{}", self.solve2(input)),
+            0 => format!("{}", self.solve1()),
+            1 => format!("{}", self.solve2()),
             _ => "".into(),
         }
     }
@@ -26,8 +24,10 @@ impl Day2 {
         }
     }
 
-    fn solve1(&self, input: Ref<String>) -> i32 {
-        let final_count = input
+    fn solve1(&self) -> i32 {
+        let final_count = self
+            .input
+            .get()
             .lines()
             .map(|line| {
                 line.chars()
@@ -49,12 +49,12 @@ impl Day2 {
         final_count.0 * final_count.1
     }
 
-    fn solve2(&self, input: Ref<String>) -> String {
+    fn solve2(&self) -> String {
         let mut words = HashSet::new();
-        for word in input.lines() {
+        for word in self.input.get().lines() {
             for (index, _) in word.chars().enumerate() {
                 let mut word = String::from(word);
-                word.replace_range(index..index+1, "*");
+                word.replace_range(index..index + 1, "*");
 
                 if !words.insert(word.clone()) {
                     return word.replace("*", "");
