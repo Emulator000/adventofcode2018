@@ -36,15 +36,13 @@ impl Day1 {
         let mut numbers = HashSet::new();
 
         let mut sum = 0;
-        self.input
-            .get()
-            .lines()
-            .cycle()
-            .all(|num| numbers.insert({
+        self.input.get().lines().cycle().all(|num| {
+            numbers.insert({
                 sum += num.parse().unwrap_or(0);
 
                 sum
-            }));
+            })
+        });
 
         sum
     }
