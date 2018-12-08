@@ -22,11 +22,31 @@ impl Day5 {
         }
     }
 
-    fn solve1(&self) -> i64 {
-        0
+    fn solve1(&self) -> usize {
+        self.input
+            .get()
+            .chars()
+            .fold(Vec::new(), |mut cs, c| {
+                match if let Some(c2) = cs.last() {
+                    c != *c2 && c.eq_ignore_ascii_case(c2)
+                } else {
+                    false
+                } {
+                    true => {
+                        cs.pop();
+                    }
+                    false => {
+                        cs.push(c);
+                    }
+                }
+
+                cs
+            })
+            .iter()
+            .count()
     }
 
-    fn solve2(&self) -> i64 {
+    fn solve2(&self) -> usize {
         0
     }
 }
