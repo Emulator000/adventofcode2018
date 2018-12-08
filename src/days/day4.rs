@@ -1,6 +1,7 @@
-use std::collections::{HashMap};
+use std::collections::{HashMap, HashSet};
+use std::ops::Range;
 
-use indexmap::{IndexSet, IndexMap};
+use indexmap::IndexMap;
 
 use text_io::Error;
 
@@ -15,7 +16,7 @@ struct Line {
     wakes_up: bool,
 }
 
-type Logs = IndexMap<i64, Line>;
+type MyResult = HashMap<u32, (i64, HashSet<Range<i64>>)>;
 
 pub struct Day4 {
     input: Box<Input>,
@@ -39,8 +40,8 @@ impl Day4 {
         }
     }
 
-    fn solves(&self) -> Logs {
-        let mut logs: IndexMap<i64, Line> = Logs::new();
+    fn solves(&self) -> MyResult {
+        let mut logs: IndexMap<i64, Line> = IndexMap::new();
         for row in self.input.get().lines() {
             let (date, action) = row.split_at(19);
 
@@ -67,14 +68,10 @@ impl Day4 {
 
         logs.sort_keys();
 
-        logs
-    }
-
-    fn solve1(&self, logs: &Logs) -> i64 {
         let mut current_gard = None;
         let mut current_time = 0;
 
-        let mut sleepings = HashMap::new();
+        let mut sleepings = MyResult::new();
         for (time, line) in logs {
             if line.id.is_some() {
                 current_gard = line.id;
@@ -82,18 +79,22 @@ impl Day4 {
 
             if let Some(id) = current_gard {
                 if line.falls_asleep {
-                    current_time = *time;
+                    current_time = time;
                 } else if line.wakes_up {
                     let sum = time - current_time;
 
-                    let sleeping = sleepings.entry(id).or_insert_with(|| (0, IndexSet::new()));
+                    let sleeping = sleepings.entry(id).or_insert_with(|| (0, HashSet::new()));
                     sleeping.0 += sum;
-                    sleeping.1.insert(current_time..*time);
+                    sleeping.1.insert(current_time..time);
                 }
             }
         }
 
-        if let Some((id, (_, ranges))) = sleepings.iter().max_by_key(|(_, (hours, _))| hours) {
+        sleepings
+    }
+
+    fn solve1(&self, result: &MyResult) -> i64 {
+        if let Some((id, (_, ranges))) = result.iter().max_by_key(|(_, (hours, _))| hours) {
             let mut minutes = HashMap::new();
             for range in ranges {
                 for time in range.start..range.end {
@@ -112,8 +113,22 @@ impl Day4 {
         }
     }
 
-    fn solve2(&self, logs: &Logs) -> i32 {
-        0
+    fn solve2(&self, result: &MyResult) -> i64 {
+        let mut minutes = HashMap::new();
+        for (id, (_, ranges)) in result {
+            for range in ranges {
+                for time in range.start..range.end {
+                    let time = Self::time_to_minutes(time);
+                    minutes.insert((id, time), *minutes.get(&(id, time)).unwrap_or(&0) + 1);
+                }
+            }
+        }
+
+        if let Some(((id, minutes), _)) = minutes.iter().max_by_key(|(_, time)| *time) {
+            **id as i64 * *minutes
+        } else {
+            0
+        }
     }
 
     fn time_to_minutes(time: i64) -> i64 {
