@@ -7,7 +7,7 @@ extern crate text_io;
 mod days;
 mod input;
 
-use crate::days::{day1::Day1, day2::Day2, day3::Day3, day4::Day4, Day};
+use crate::days::{day1::Day1, day2::Day2, day3::Day3, day4::Day4, day5::Day5, Day};
 
 fn main() {
     let day1: Box<Day> = Box::new(Day1::new());
@@ -21,13 +21,16 @@ fn main() {
 
     let day4: Box<Day> = Box::new(Day4::new());
     println!("Day 4: {}, {}\n", day4.solve(0), day4.solve(1));
+
+    let day5: Box<Day> = Box::new(Day5::new());
+    println!("Day 5: {}, {}\n", day5.solve(0), day5.solve(1));
 }
 
 #[cfg(test)]
 mod tests {
     use test::Bencher;
 
-    use crate::days::{day1::Day1, day2::Day2, day3::Day3, Day};
+    use crate::days::{day1::Day1, day2::Day2, day3::Day3, day4::Day4, day5::Day5, Day};
 
     fn day1() -> Box<Day> {
         Box::new(Day1::new())
@@ -43,6 +46,10 @@ mod tests {
 
     fn day4() -> Box<Day> {
         Box::new(Day4::new())
+    }
+
+    fn day5() -> Box<Day> {
+        Box::new(Day5::new())
     }
 
     #[bench]
@@ -90,6 +97,18 @@ mod tests {
     #[bench]
     fn day4_2(bencher: &mut Bencher) {
         let day = day4();
+        bencher.iter(|| day.solve(1));
+    }
+
+    #[bench]
+    fn day5_1(bencher: &mut Bencher) {
+        let day = day5();
+        bencher.iter(|| day.solve(0));
+    }
+
+    #[bench]
+    fn day5_2(bencher: &mut Bencher) {
+        let day = day5();
         bencher.iter(|| day.solve(1));
     }
 }
