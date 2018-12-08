@@ -1,6 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap};
 
-use indexmap::IndexMap;
+use indexmap::{IndexSet, IndexMap};
 
 use text_io::Error;
 
@@ -15,15 +15,18 @@ struct Line {
     wakes_up: bool,
 }
 
+type Logs = IndexMap<i64, Line>;
+
 pub struct Day4 {
     input: Box<Input>,
 }
 
 impl Day for Day4 {
     fn solve(&self, part: usize) -> String {
+        let solves = self.solves();
         match part {
-            0 => format!("{}", self.solve1()),
-            1 => format!("{}", self.solve2()),
+            0 => format!("{}", self.solve1(&solves)),
+            1 => format!("{}", self.solve2(&solves)),
             _ => "".into(),
         }
     }
@@ -36,8 +39,8 @@ impl Day4 {
         }
     }
 
-    fn solve1(&self) -> i64 {
-        let mut logs: IndexMap<i64, Line> = IndexMap::new();
+    fn solves(&self) -> Logs {
+        let mut logs: IndexMap<i64, Line> = Logs::new();
         for row in self.input.get().lines() {
             let (date, action) = row.split_at(19);
 
@@ -64,6 +67,10 @@ impl Day4 {
 
         logs.sort_keys();
 
+        logs
+    }
+
+    fn solve1(&self, logs: &Logs) -> i64 {
         let mut current_gard = None;
         let mut current_time = 0;
 
@@ -75,35 +82,37 @@ impl Day4 {
 
             if let Some(id) = current_gard {
                 if line.falls_asleep {
-                    current_time = time;
+                    current_time = *time;
                 } else if line.wakes_up {
                     let sum = time - current_time;
 
-                    let sleeping = sleepings.entry(id).or_insert_with(|| (0, HashSet::new()));
+                    let sleeping = sleepings.entry(id).or_insert_with(|| (0, IndexSet::new()));
                     sleeping.0 += sum;
-                    sleeping.1.insert(current_time..time);
+                    sleeping.1.insert(current_time..*time);
                 }
             }
         }
 
         if let Some((id, (_, ranges))) = sleepings.iter().max_by_key(|(_, (hours, _))| hours) {
-            let mut minutes = HashSet::new();
+            let mut minutes = HashMap::new();
             for range in ranges {
                 for time in range.start..range.end {
                     let time = Self::time_to_minutes(time);
-                    if !minutes.insert(time) {
-                        return *id as i64 * time;
-                    }
+                    minutes.insert(time, *minutes.get(&time).unwrap_or(&0) + 1);
                 }
             }
 
-            0
+            if let Some((minutes, _)) = minutes.iter().max_by_key(|(_, time)| *time) {
+                *id as i64 * *minutes
+            } else {
+                0
+            }
         } else {
             0
         }
     }
 
-    fn solve2(&self) -> i32 {
+    fn solve2(&self, logs: &Logs) -> i32 {
         0
     }
 
