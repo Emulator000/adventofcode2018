@@ -28,10 +28,7 @@ impl Day1 {
         self.input
             .get()
             .lines()
-            .map(|num| match num.parse() {
-                Ok(num) => num,
-                Err(_) => 0,
-            })
+            .map(|num| num.parse().unwrap_or(0))
             .sum()
     }
 
@@ -43,14 +40,11 @@ impl Day1 {
             .get()
             .lines()
             .cycle()
-            .all(|num| match num.parse() {
-                Ok::<i32, _>(num) => numbers.insert({
-                    sum += num;
+            .all(|num| numbers.insert({
+                sum += num.parse().unwrap_or(0);
 
-                    sum
-                }),
-                Err(_) => true,
-            });
+                sum
+            }));
 
         sum
     }
